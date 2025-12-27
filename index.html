@@ -4,13 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Backgammon Tournament 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Backgammon Tournament 2026</h1>
-            <button id="refreshBtn" class="refresh-btn">Refresh Data</button>
+            <div class="header-content">
+                <div class="header-accent"></div>
+                <h1>Backgammon Tournament <span class="year">2026</span></h1>
+            </div>
+            <button id="refreshBtn" class="refresh-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                    <path d="M16 21h5v-5"/>
+                </svg>
+                Refresh
+            </button>
         </header>
 
         <div id="loading" class="loading hidden">
@@ -20,66 +34,39 @@
 
         <div id="error" class="error hidden"></div>
 
-        <div class="prize-pool">
-            <div class="prize-pool-label">Prize Pool</div>
-            <div id="prizePoolAmount" class="prize-pool-amount">$--</div>
-            <div class="prize-breakdown">
-                <div class="prize-item gold">
-                    <span class="place">1st</span>
-                    <span id="prize1st" class="amount">$--</span>
-                </div>
-                <div class="prize-item silver">
-                    <span class="place">2nd</span>
-                    <span id="prize2nd" class="amount">$--</span>
-                </div>
-                <div class="prize-item bronze">
-                    <span class="place">3rd</span>
-                    <span id="prize3rd" class="amount">$--</span>
-                </div>
+        <!-- Prize Pool & Podium -->
+        <div class="podium-section">
+            <div class="prize-pool">
+                <div class="prize-pool-label">Prize Pool</div>
+                <div id="prizePoolAmount" class="prize-pool-amount">$--</div>
             </div>
-        </div>
-
-        <div class="rules-section">
-            <h2 class="rules-title">Tournament Rules</h2>
-            <div class="rules-grid">
-                <div class="rule-card format">
-                    <div class="rule-icon">&#9813;</div>
-                    <h3>Format</h3>
-                    <ul>
-                        <li><strong>Swiss System</strong> - 4 rounds</li>
-                        <li>Everyone plays <strong>4 matches</strong> total</li>
-                        <li>No elimination</li>
-                        <li>Est. time: <strong>2.5-3 hours</strong></li>
-                    </ul>
+            <div class="podium" id="podium">
+                <div class="podium-place second" id="podium-2">
+                    <div class="podium-medal">2</div>
+                    <div class="podium-name">--</div>
+                    <div class="podium-stats">
+                        <span class="podium-record">0-0</span>
+                    </div>
+                    <div class="podium-prize" id="prize2nd">$--</div>
+                    <div class="podium-bar"></div>
                 </div>
-
-                <div class="rule-card match">
-                    <div class="rule-icon">&#9823;</div>
-                    <h3>Match Rules</h3>
-                    <ul>
-                        <li>Each match is <strong>5 points</strong></li>
-                        <li>First to 5 wins the match</li>
-                    </ul>
+                <div class="podium-place first" id="podium-1">
+                    <div class="podium-medal">1</div>
+                    <div class="podium-name">--</div>
+                    <div class="podium-stats">
+                        <span class="podium-record">0-0</span>
+                    </div>
+                    <div class="podium-prize" id="prize1st">$--</div>
+                    <div class="podium-bar"></div>
                 </div>
-
-                <div class="rule-card pairing">
-                    <div class="rule-icon">&#9822;</div>
-                    <h3>Pairing</h3>
-                    <ul>
-                        <li><strong>Round 1:</strong> Random pairings</li>
-                        <li><strong>Rounds 2-4:</strong> Similar records face each other</li>
-                        <li>Winners play winners</li>
-                        <li>No rematches</li>
-                    </ul>
-                </div>
-
-                <div class="rule-card championship">
-                    <div class="rule-icon">&#9812;</div>
-                    <h3>Championship</h3>
-                    <ul>
-                        <li>Rank by <strong>most match wins</strong></li>
-                        <li>Top 2 players face off in a <strong>7-point final match</strong> for 1st/2nd place</li>
-                    </ul>
+                <div class="podium-place third" id="podium-3">
+                    <div class="podium-medal">3</div>
+                    <div class="podium-name">--</div>
+                    <div class="podium-stats">
+                        <span class="podium-record">0-0</span>
+                    </div>
+                    <div class="podium-prize" id="prize3rd">$--</div>
+                    <div class="podium-bar"></div>
                 </div>
             </div>
         </div>
@@ -87,6 +74,7 @@
         <div id="lastUpdated" class="last-updated"></div>
 
         <div class="table-container">
+            <h2 class="table-title">Full Standings</h2>
             <table id="leaderboard">
                 <thead>
                     <tr>
@@ -101,6 +89,92 @@
                     <!-- Data will be populated here -->
                 </tbody>
             </table>
+        </div>
+
+        <!-- Collapsible Rules Section -->
+        <div class="rules-section">
+            <button class="rules-toggle" id="rulesToggle">
+                <h2 class="rules-title">Tournament Rules</h2>
+                <svg class="rules-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="rules-content" id="rulesContent">
+                <div class="rules-grid">
+                    <div class="rule-card format">
+                        <div class="rule-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                                <rect x="14" y="14" width="7" height="7" rx="1"/>
+                            </svg>
+                        </div>
+                        <h3>Format</h3>
+                        <ul>
+                            <li><strong>Swiss System</strong> - 4 rounds</li>
+                            <li>Everyone plays <strong>4 matches</strong> total</li>
+                            <li>No elimination</li>
+                            <li>Est. time: <strong>2.5-3 hours</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card match">
+                        <div class="rule-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="4" y="4" width="6" height="6" rx="1"/>
+                                <rect x="14" y="4" width="6" height="6" rx="1"/>
+                                <circle cx="7" cy="7" r="1" fill="currentColor"/>
+                                <circle cx="17" cy="7" r="1" fill="currentColor"/>
+                                <circle cx="15" cy="5" r="1" fill="currentColor"/>
+                                <circle cx="19" cy="9" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3>Match Rules</h3>
+                        <ul>
+                            <li>Each match is <strong>5 points</strong></li>
+                            <li>First to 5 wins the match</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card pairing">
+                        <div class="rule-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <h3>Pairing</h3>
+                        <ul>
+                            <li><strong>Round 1:</strong> Random pairings</li>
+                            <li><strong>Rounds 2-4:</strong> Similar records face each other</li>
+                            <li>Winners play winners</li>
+                            <li>No rematches</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card championship">
+                        <div class="rule-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                                <path d="M4 22h16"/>
+                                <path d="M10 22V8a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v14"/>
+                                <path d="M6 2v4"/>
+                                <path d="M18 2v4"/>
+                                <path d="M12 2v4"/>
+                            </svg>
+                        </div>
+                        <h3>Championship</h3>
+                        <ul>
+                            <li>Rank by <strong>most match wins</strong></li>
+                            <li>Top 2 players face off in a <strong>7-point final match</strong> for 1st/2nd place</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="resources">

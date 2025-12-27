@@ -20,6 +20,15 @@ const app = {
                 this.sortBy(sortKey);
             });
         });
+
+        // Rules toggle - start collapsed
+        const rulesToggle = document.getElementById('rulesToggle');
+        const rulesSection = document.querySelector('.rules-section');
+        rulesSection.classList.add('collapsed');
+
+        rulesToggle.addEventListener('click', () => {
+            rulesSection.classList.toggle('collapsed');
+        });
     },
 
     async loadLeaderboard() {
@@ -35,6 +44,7 @@ const app = {
 
             this.leaderboardData = standings;
             this.renderLeaderboard();
+            this.renderPodium();
             this.renderPrizes(setup);
             this.updateLastRefreshedTime();
         } catch (error) {
@@ -241,6 +251,43 @@ const app = {
 
             tbody.appendChild(row);
         });
+    },
+
+    renderPodium() {
+        // Get top 3 players sorted by wins (descending)
+        const sortedByWins = [...this.leaderboardData].sort((a, b) => {
+            // Primary sort by wins
+            if (b.matchesWon !== a.matchesWon) {
+                return b.matchesWon - a.matchesWon;
+            }
+            // Secondary sort by win rate
+            return parseFloat(b.winRate) - parseFloat(a.winRate);
+        });
+
+        const top3 = sortedByWins.slice(0, 3);
+
+        // Update podium places
+        top3.forEach((player, index) => {
+            const place = index + 1;
+            const podiumEl = document.getElementById(`podium-${place}`);
+
+            if (podiumEl) {
+                const nameEl = podiumEl.querySelector('.podium-name');
+                const recordEl = podiumEl.querySelector('.podium-record');
+
+                nameEl.textContent = player.player;
+                recordEl.textContent = `${player.matchesWon}-${player.matchesLost}`;
+            }
+        });
+
+        // Handle case where there are fewer than 3 players
+        for (let i = top3.length + 1; i <= 3; i++) {
+            const podiumEl = document.getElementById(`podium-${i}`);
+            if (podiumEl) {
+                podiumEl.querySelector('.podium-name').textContent = '--';
+                podiumEl.querySelector('.podium-record').textContent = '0-0';
+            }
+        }
     },
 
     updateSortIndicators() {
